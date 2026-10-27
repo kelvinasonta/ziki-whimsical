@@ -1,0 +1,282 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #0b1733;
+  --muted: #5a6987;
+  --line: #dce5f4;
+  --surface: #f4f7fd;
+  --blue: #3978f6;
+  --blue-bright: #8fc9ff;
+  --blue-soft: #eaf2ff;
+  --dark-navy: #0b1733;
+  --card-bg: #ffffff;
+}
+
+@theme inline {
+  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
+  --font-display: var(--font-manrope), system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+}
+
+.font-display {
+  font-family: var(--font-manrope), system-ui, sans-serif;
+}
+
+/* Signature Ziki switch gentle float when idle */
+@keyframes switchBreathe {
+  0%,
+  100% {
+    transform: translateX(0%) scale(1);
+  }
+  50% {
+    transform: translateX(68%) scale(1.04);
+  }
+}
+
+/* Grid line comet pulses */
+@keyframes gridCometDown {
+  0% {
+    transform: translateY(-60px);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(680px);
+    opacity: 0;
+  }
+}
+
+@keyframes gridCometUp {
+  0% {
+    transform: translateY(680px);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-60px);
+    opacity: 0;
+  }
+}
+
+@keyframes gridCometRight {
+  0% {
+    transform: translateX(-80px);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(1200px);
+    opacity: 0;
+  }
+}
+
+/* Floating & orbital objects */
+@keyframes badgeFloat {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(1.5deg);
+  }
+}
+
+@keyframes orbitBob {
+  0%,
+  100% {
+    transform: translate(0px, 0px) rotate(-2deg);
+  }
+  33% {
+    transform: translate(6px, -10px) rotate(2deg);
+  }
+  66% {
+    transform: translate(-5px, -5px) rotate(-1deg);
+  }
+}
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinReverseSlow {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes coinBobSpin {
+  0%,
+  100% {
+    transform: translateY(0px) scaleX(1);
+  }
+  50% {
+    transform: translateY(-8px) scaleX(0.82);
+  }
+}
+
+@keyframes antennaWiggle {
+  0%,
+  100% {
+    transform: rotate(-9deg);
+  }
+  50% {
+    transform: rotate(11deg);
+  }
+}
+
+@keyframes floatBob {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
+.switch-idle-float {
+  animation: switchBreathe 3.4s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.comet-down-1 {
+  animation: gridCometDown 5.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 0.4;
+  }
+}
+
+.comet-down-2 {
+  animation: gridCometDown 7.2s cubic-bezier(0.4, 0, 0.2, 1) infinite 1.8s;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 0.4;
+  }
+}
+
+.comet-down-3 {
+  animation: gridCometDown 6.1s cubic-bezier(0.4, 0, 0.2, 1) infinite 3.1s;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 0.4;
+  }
+}
+
+.comet-up-1 {
+  animation: gridCometUp 6.4s cubic-bezier(0.4, 0, 0.2, 1) infinite 0.9s;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 0.4;
+  }
+}
+
+.comet-up-2 {
+  animation: gridCometUp 7.8s cubic-bezier(0.4, 0, 0.2, 1) infinite 2.5s;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 0.4;
+  }
+}
+
+.comet-right-1 {
+  animation: gridCometRight 8.5s linear infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 0.3;
+  }
+}
+
+.floating-pill {
+  animation: badgeFloat 4s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.floating-pill-delayed {
+  animation: badgeFloat 4.6s ease-in-out infinite 1.5s;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.orbit-object {
+  animation: orbitBob 5.2s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.orbit-object-delayed {
+  animation: orbitBob 5.8s ease-in-out infinite 2s;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.gear-spin {
+  animation: spinSlow 14s linear infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.gear-spin-reverse {
+  animation: spinReverseSlow 11s linear infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.coin-float {
+  animation: coinBobSpin 3.2s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.bot-float {
+  animation: floatBob 3.6s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.antenna-wiggle {
+  transform-origin: bottom center;
+  animation: antennaWiggle 2s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+dialog::backdrop {
+  background-color: rgba(11, 23, 51, 0.55);
+  backdrop-filter: blur(6px);
+}
