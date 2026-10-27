@@ -2,7 +2,12 @@
 
 import React from 'react';
 
-export type BotAccessory = 'none' | 'crown' | 'propeller' | 'hardhat' | 'antenna_star';
+export type BotAccessory =
+  | 'none'
+  | 'crown'
+  | 'propeller'
+  | 'hardhat'
+  | 'antenna_star';
 export type BotMood = 'happy' | 'working' | 'celebrating' | 'curious';
 
 interface WhimsicalRobotProps {
@@ -14,38 +19,42 @@ interface WhimsicalRobotProps {
 }
 
 const PALETTES = {
-  orange: {
-    bg: '#FFEDD5',
-    body: '#F97316',
-    dark: '#C2410C',
-    cheek: '#FB7185',
-    screen: '#FFF7ED',
-  },
   blue: {
-    bg: '#DBEAFE',
-    body: '#2563EB',
-    dark: '#1E40AF',
-    cheek: '#60A5FA',
-    screen: '#EFF6FF',
+    surface: '#E8F0FE',
+    border: '#AECBFA',
+    primary: '#1A73E8',
+    secondary: '#4285F4',
+    accent: '#8AB4F8',
+    core: '#174EA6',
   },
   emerald: {
-    bg: '#D1FAE5',
-    body: '#10B981',
-    dark: '#047857',
-    cheek: '#34D399',
-    screen: '#ECFDF5',
+    surface: '#E6F4EA',
+    border: '#A8DAB5',
+    primary: '#1E8E3E',
+    secondary: '#34A853',
+    accent: '#81C995',
+    core: '#0D652D',
+  },
+  orange: {
+    surface: '#FEF7E0',
+    border: '#FDE293',
+    primary: '#E37400',
+    secondary: '#F9AB00',
+    accent: '#FDD663',
+    core: '#B06000',
   },
   violet: {
-    bg: '#EDE9FE',
-    body: '#7C3AED',
-    dark: '#5B21B6',
-    cheek: '#F472B6',
-    screen: '#F5F3FF',
+    surface: '#F3E8FD',
+    border: '#D7AEFB',
+    primary: '#8430CE',
+    secondary: '#A142F4',
+    accent: '#C58AF9',
+    core: '#5B1D99',
   },
 };
 
 export function WhimsicalRobot({
-  color = 'orange',
+  color = 'blue',
   mood = 'happy',
   accessory = 'none',
   size = 'md',
@@ -53,163 +62,168 @@ export function WhimsicalRobot({
 }: WhimsicalRobotProps) {
   const p = PALETTES[color];
   const dims =
-    size === 'sm' ? 'h-11 w-11' : size === 'lg' ? 'h-20 w-20' : 'h-14 w-14';
+    size === 'sm' ? 'h-10 w-10' : size === 'lg' ? 'h-16 w-16' : 'h-12 w-12';
 
   return (
     <div
-      className={`relative inline-flex shrink-0 items-center justify-center rounded-2xl ${dims} ${className}`}
-      style={{ backgroundColor: p.bg }}
+      className={`relative inline-flex shrink-0 items-center justify-center rounded-2xl border transition-transform duration-300 ${dims} ${className}`}
+      style={{
+        backgroundColor: p.surface,
+        borderColor: p.border,
+        boxShadow: `0 6px 18px -4px ${p.primary}26, inset 0 1px 0 0 rgba(255,255,255,0.85)`,
+      }}
+      aria-hidden="true"
     >
       <svg
-        viewBox="0 0 80 80"
+        viewBox="0 0 64 64"
         fill="none"
+        className="h-full w-full p-1.5"
         xmlns="http://www.w3.org/2000/svg"
-        className="h-full w-full p-1"
       >
-        {/* Antenna */}
-        <g className="antenna-wiggle">
-          <line
-            x1="40"
-            y1="22"
-            x2="40"
-            y2="10"
-            stroke={p.dark}
-            strokeWidth="4"
-            strokeLinecap="round"
-          />
-          <circle cx="40" cy="9" r="5" fill={p.body} stroke="#0F172A" strokeWidth="2.5" />
-          {mood === 'celebrating' && (
-            <>
-              <circle cx="28" cy="8" r="2" fill="#FACC15" />
-              <circle cx="52" cy="8" r="2" fill="#FACC15" />
-            </>
-          )}
-        </g>
-
-        {/* Optional Whimsical Hat / Accessory */}
-        {accessory === 'crown' && (
-          <path
-            d="M27 22L30 11L36 17L40 9L44 17L50 11L53 22H27Z"
-            fill="#FACC15"
-            stroke="#0F172A"
-            strokeWidth="2.2"
-            strokeLinejoin="round"
-          />
-        )}
-        {accessory === 'hardhat' && (
-          <path
-            d="M24 23C24 15 31 11 40 11C49 11 56 15 56 23H24Z"
-            fill="#FBBF24"
-            stroke="#0F172A"
-            strokeWidth="2.2"
-          />
-        )}
-        {accessory === 'propeller' && (
-          <g>
-            <ellipse
-              cx="40"
-              cy="9"
-              rx="13"
-              ry="3.5"
-              fill="#38BDF8"
-              stroke="#0F172A"
-              strokeWidth="2"
-            />
-            <circle cx="40" cy="9" r="3" fill="#F43F5E" />
-          </g>
-        )}
-
-        {/* Side Ears / Bolts */}
-        <rect
-          x="12"
-          y="36"
-          width="6"
-          height="14"
-          rx="3"
-          fill={p.dark}
-          stroke="#0F172A"
-          strokeWidth="2.5"
-        />
-        <rect
-          x="62"
-          y="36"
-          width="6"
-          height="14"
-          rx="3"
-          fill={p.dark}
-          stroke="#0F172A"
-          strokeWidth="2.5"
+        {/* Outer Precision Orbital Track */}
+        <circle
+          cx="32"
+          cy="32"
+          r="25"
+          stroke={p.primary}
+          strokeOpacity="0.24"
+          strokeWidth="1.5"
+          strokeDasharray={mood === 'working' ? '4 4' : '8 4'}
+          className="gear-spin"
+          style={{ transformOrigin: '32px 32px' }}
         />
 
-        {/* Robot Head Capsule */}
+        {/* Secondary Counter-Rotating Ring */}
+        <circle
+          cx="32"
+          cy="32"
+          r="20"
+          stroke={p.secondary}
+          strokeOpacity="0.35"
+          strokeWidth="1.25"
+          strokeDasharray="14 8"
+          className="gear-spin-reverse"
+          style={{ transformOrigin: '32px 32px' }}
+        />
+
+        {/* Sculpted Geometric Agent Core */}
         <rect
-          x="17"
+          x="16"
+          y="16"
+          width="32"
+          height="32"
+          rx="10"
+          fill={p.primary}
+          stroke="white"
+          strokeWidth="1.5"
+        />
+
+        {/* Inner Glass Visor */}
+        <rect
+          x="20"
           y="22"
-          width="46"
-          height="40"
-          rx="14"
-          fill={p.body}
-          stroke="#0F172A"
-          strokeWidth="3"
+          width="24"
+          height="16"
+          rx="5"
+          fill={p.core}
         />
 
-        {/* Inner Face Visor */}
-        <rect
-          x="23"
-          y="28"
-          width="34"
-          height="26"
-          rx="9"
-          fill={p.screen}
-          stroke="#0F172A"
-          strokeWidth="2.2"
-        />
-
-        {/* Rosy Cheeks */}
-        <circle cx="28" cy="46" r="3" fill={p.cheek} opacity="0.65" />
-        <circle cx="52" cy="46" r="3" fill={p.cheek} opacity="0.65" />
-
-        {/* Expressive Eyes */}
+        {/* Expressive Telemetry Eyes / Signal Wave */}
         {mood === 'celebrating' ? (
           <>
             <path
-              d="M29 39C30.5 36 33.5 36 35 39"
-              stroke="#0F172A"
-              strokeWidth="2.8"
+              d="M24 29L26.5 26.5L29 29"
+              stroke="white"
+              strokeWidth="2.2"
               strokeLinecap="round"
+              strokeLinejoin="round"
             />
             <path
-              d="M45 39C46.5 36 49.5 36 51 39"
-              stroke="#0F172A"
-              strokeWidth="2.8"
+              d="M35 29L37.5 26.5L40 29"
+              stroke="white"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M28 33.5C29.3 35 34.7 35 36 33.5"
+              stroke={p.accent}
+              strokeWidth="2"
               strokeLinecap="round"
             />
           </>
         ) : mood === 'working' ? (
           <>
-            <rect x="28" y="36" width="7" height="4" rx="2" fill="#0F172A" />
-            <rect x="45" y="36" width="7" height="4" rx="2" fill="#0F172A" />
+            <circle cx="26.5" cy="29.5" r="2.3" fill="white" />
+            <circle cx="37.5" cy="29.5" r="2.3" fill="white" />
+            <line
+              x1="25"
+              y1="34"
+              x2="39"
+              y2="34"
+              stroke={p.accent}
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </>
+        ) : mood === 'curious' ? (
+          <>
+            <circle cx="26.5" cy="29.5" r="2.6" fill="white" />
+            <circle cx="37.5" cy="28.5" r="2" fill="white" />
+            <circle cx="32" cy="34" r="1.6" fill={p.accent} />
           </>
         ) : (
           <>
-            <circle cx="32" cy="38" r="3.5" fill="#0F172A" />
-            <circle cx="33" cy="36.8" r="1.1" fill="#FFFFFF" />
-            <circle cx="48" cy="38" r="3.5" fill="#0F172A" />
-            <circle cx="49" cy="36.8" r="1.1" fill="#FFFFFF" />
+            <circle cx="26.5" cy="29.5" r="2.3" fill="white" />
+            <circle cx="37.5" cy="29.5" r="2.3" fill="white" />
+            <path
+              d="M28.5 33.5C29.8 34.8 34.2 34.8 35.5 33.5"
+              stroke="white"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            />
           </>
         )}
 
-        {/* Mouth */}
-        {mood === 'curious' ? (
-          <circle cx="40" cy="47" r="2.8" fill="#0F172A" />
-        ) : (
+        {/* Role Specialization Micro-Badge */}
+        {accessory === 'crown' && (
           <path
-            d="M35 46C36.8 49 43.2 49 45 46"
-            stroke="#0F172A"
-            strokeWidth="2.5"
-            strokeLinecap="round"
+            d="M24 14L27.5 10L32 13.5L36.5 10L40 14H24Z"
+            fill="#F9AB00"
+            stroke="white"
+            strokeWidth="1"
           />
         )}
+        {accessory === 'propeller' && (
+          <g>
+            <circle cx="32" cy="11" r="2.5" fill={p.secondary} />
+            <path
+              d="M23 11H41"
+              stroke={p.primary}
+              strokeWidth="2.2"
+              strokeLinecap="round"
+            />
+          </g>
+        )}
+        {accessory === 'hardhat' && (
+          <path
+            d="M23 15C23 11.2 27 9 32 9C37 9 41 11.2 41 15H23Z"
+            fill="#1E8E3E"
+          />
+        )}
+        {accessory === 'antenna_star' && (
+          <circle
+            cx="32"
+            cy="10"
+            r="3.2"
+            fill="#F9AB00"
+            stroke="white"
+            strokeWidth="1.2"
+          />
+        )}
+
+        {/* Orbital Node Satellite Dot */}
+        <circle cx="53" cy="19" r="3" fill={p.secondary} />
       </svg>
     </div>
   );

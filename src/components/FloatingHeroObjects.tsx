@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { WhimsicalRobot } from '@/components/WhimsicalRobot';
 
 interface FloatingHeroObjectsProps {
   isDark: boolean;
@@ -12,22 +11,23 @@ interface FloatingHeroObjectsProps {
   onTriggerBurst: (label: string) => void;
 }
 
-const BURST_PARTICLES = Array.from({ length: 16 }, (_, i) => {
-  const angle = (i / 16) * Math.PI * 2;
-  const distance = 110 + (i % 3) * 45;
+const BURST_PARTICLES = Array.from({ length: 12 }, (_, i) => {
+  const angle = (i / 12) * Math.PI * 2;
+  const distance = 96 + (i % 3) * 36;
   return {
     id: i,
     dx: Math.cos(angle) * distance,
     dy: Math.sin(angle) * distance,
+    // Google Flagship Spectrum: Blue, Emerald, Amber, Violet
     color:
       i % 4 === 0
-        ? '#3978F6'
+        ? '#1A73E8'
         : i % 4 === 1
-          ? '#F59E0B'
+          ? '#1E8E3E'
           : i % 4 === 2
-            ? '#10B981'
-            : '#8B5CF6',
-    shape: i % 3 === 0 ? 'star' : i % 3 === 1 ? 'coin' : 'spark',
+            ? '#F9AB00'
+            : '#8430CE',
+    kind: i % 2 === 0 ? 'diamond' : 'ring',
   };
 });
 
@@ -42,44 +42,47 @@ export function FloatingHeroObjects({
   const dimOwners = activeFilter !== 'all' && activeFilter !== 'owners';
   const dimLedger = activeFilter !== 'all' && activeFilter !== 'ledger';
 
+  const cardSurface = isDark
+    ? 'border-[#223559] bg-[#0D182E]/90 text-[#F1F5F9] shadow-[0_16px_40px_-12px_rgba(0,0,0,0.55)]'
+    : 'border-[#E2E8F0] bg-white/92 text-[#0F172A] shadow-[0_12px_32px_-8px_rgba(15,23,42,0.08),0_2px_6px_rgba(15,23,42,0.03)]';
+
   return (
     <>
-      {/* 1. PARTICLE CELEBRATION BURST OVERLAY */}
+      {/* 1. PRECISION GEOMETRIC PULSE BURST */}
       <AnimatePresence mode="popLayout">
         {burstKey > 0 && (
           <div
             key={burstKey}
-            className="pointer-events-none absolute left-1/2 top-[44%] z-30 -translate-x-1/2 -translate-y-1/2"
+            className="pointer-events-none absolute left-1/2 top-[42%] z-30 -translate-x-1/2 -translate-y-1/2"
           >
+            <motion.div
+              initial={{ scale: 0.4, opacity: 0.55 }}
+              animate={{ scale: 2.3, opacity: 0 }}
+              transition={{ duration: 0.75, ease: 'easeOut' }}
+              className="absolute -left-12 -top-12 h-24 w-24 rounded-full border border-[#1A73E8]/40"
+            />
             {BURST_PARTICLES.map((p) => (
               <motion.div
                 key={p.id}
-                initial={{ x: 0, y: 0, scale: 0.2, opacity: 1, rotate: 0 }}
+                initial={{ x: 0, y: 0, scale: 0.3, opacity: 1 }}
                 animate={{
                   x: p.dx,
                   y: p.dy,
-                  scale: [0.4, 1.25, 0],
-                  opacity: [1, 1, 0],
-                  rotate: 260,
+                  scale: [0.5, 1.1, 0],
+                  opacity: [1, 0.9, 0],
                 }}
-                transition={{ duration: 0.95, ease: 'easeOut' }}
-                className="absolute -left-2 -top-2"
+                transition={{ duration: 0.8, ease: 'easeOut' }}
+                className="absolute -left-1.5 -top-1.5"
               >
-                {p.shape === 'star' ? (
-                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill={p.color}>
-                    <path d="M12 2L14.8 8.5L22 9.3L16.5 14L18.2 21L12 17.3L5.8 21L7.5 14L2 9.3L9.2 8.5L12 2Z" />
-                  </svg>
-                ) : p.shape === 'coin' ? (
+                {p.kind === 'diamond' ? (
                   <div
-                    className="flex h-5 w-5 items-center justify-center rounded-full border border-white/60 text-[9px] font-black text-white shadow-sm"
+                    className="h-2.5 w-2.5 rotate-45 rounded-[2px]"
                     style={{ backgroundColor: p.color }}
-                  >
-                    Z
-                  </div>
+                  />
                 ) : (
                   <div
-                    className="h-3 w-3 rotate-45 rounded-xs"
-                    style={{ backgroundColor: p.color }}
+                    className="h-3 w-3 rounded-full border-2"
+                    style={{ borderColor: p.color }}
                   />
                 )}
               </motion.div>
@@ -88,366 +91,298 @@ export function FloatingHeroObjects({
         )}
       </AnimatePresence>
 
-      {/* 2. SPINNING ARCHITECTURAL GEARS (Top-Right & Bottom-Left Background Objects) */}
-      <div className="pointer-events-none absolute -left-10 -top-10 hidden opacity-35 lg:block">
+      {/* 2. ARCHITECTURAL ORBITAL CALIBRATION RINGS (Background Corner Geometry) */}
+      <div className="pointer-events-none absolute -left-16 -top-16 hidden opacity-45 lg:block">
         <svg
-          className={`h-40 w-40 ${turboSwitch ? 'gear-spin-fast' : 'gear-spin'}`}
-          viewBox="0 0 120 120"
+          className={`h-56 w-56 ${turboSwitch ? 'gear-spin-fast' : 'gear-spin'}`}
+          viewBox="0 0 200 200"
           fill="none"
         >
           <circle
-            cx="60"
-            cy="60"
-            r="36"
-            stroke={isDark ? '#8FC9FF' : '#3978F6'}
-            strokeWidth="4"
+            cx="100"
+            cy="100"
+            r="84"
+            stroke={isDark ? '#4285F4' : '#1A73E8'}
+            strokeOpacity="0.18"
+            strokeWidth="1.25"
+            strokeDasharray="6 8"
+          />
+          <circle
+            cx="100"
+            cy="100"
+            r="60"
+            stroke={isDark ? '#34A853' : '#1E8E3E'}
+            strokeOpacity="0.16"
+            strokeWidth="1.25"
+          />
+          <circle cx="100" cy="16" r="3.5" fill="#1A73E8" />
+          <circle cx="160" cy="100" r="3" fill="#1E8E3E" />
+        </svg>
+      </div>
+
+      <div className="pointer-events-none absolute -bottom-20 -right-16 hidden opacity-45 lg:block">
+        <svg
+          className="gear-spin-reverse h-60 w-60"
+          viewBox="0 0 200 200"
+          fill="none"
+        >
+          <circle
+            cx="100"
+            cy="100"
+            r="86"
+            stroke={isDark ? '#F9AB00' : '#E37400'}
+            strokeOpacity="0.18"
+            strokeWidth="1.25"
             strokeDasharray="10 8"
           />
           <circle
-            cx="60"
-            cy="60"
-            r="22"
-            stroke={isDark ? '#8FC9FF' : '#3978F6'}
-            strokeWidth="2.5"
+            cx="100"
+            cy="100"
+            r="58"
+            stroke={isDark ? '#8AB4F8' : '#1A73E8'}
+            strokeOpacity="0.16"
+            strokeWidth="1.25"
           />
-          {Array.from({ length: 8 }).map((_, idx) => (
-            <rect
-              key={idx}
-              x="55"
-              y="8"
-              width="10"
-              height="14"
-              rx="3"
-              fill={isDark ? '#3978F6' : '#90B7FF'}
-              transform={`rotate(${idx * 45} 60 60)`}
-            />
-          ))}
+          <circle cx="100" cy="14" r="3.5" fill="#F9AB00" />
+          <circle cx="42" cy="100" r="3" fill="#1A73E8" />
         </svg>
       </div>
 
-      <div className="pointer-events-none absolute -bottom-12 -right-8 hidden opacity-35 lg:block">
-        <svg
-          className="gear-spin-reverse h-44 w-44"
-          viewBox="0 0 120 120"
-          fill="none"
-        >
-          <circle
-            cx="60"
-            cy="60"
-            r="38"
-            stroke={isDark ? '#D29F5D' : '#3978F6'}
-            strokeWidth="3.5"
-            strokeDasharray="12 6"
-          />
-          <circle
-            cx="60"
-            cy="60"
-            r="18"
-            stroke={isDark ? '#8FC9FF' : '#3978F6'}
-            strokeWidth="2.5"
-          />
-          {Array.from({ length: 10 }).map((_, idx) => (
-            <rect
-              key={idx}
-              x="56"
-              y="6"
-              width="8"
-              height="13"
-              rx="2.5"
-              fill={isDark ? '#D29F5D' : '#3978F6'}
-              transform={`rotate(${idx * 36} 60 60)`}
-            />
-          ))}
-        </svg>
-      </div>
-
-      {/* 3. DRAGGABLE WHIMSICAL SCOUT BOT SATELLITE (Top-Left) */}
+      {/* 3. SATELLITE 01: DISCOVERY TELEMETRY NODE (Top-Left) */}
       <motion.div
         drag
-        dragConstraints={{ left: -40, right: 60, top: -30, bottom: 60 }}
-        whileHover={{ scale: 1.08, rotate: -3 }}
-        whileTap={{ scale: 0.94 }}
-        onClick={() => onTriggerBurst('Scout Bot pinged issue #1842')}
-        title="Drag me or click to ping!"
-        className={`bot-float absolute left-[3%] top-[5%] z-20 hidden cursor-grab items-center gap-2.5 rounded-2xl border p-2.5 pr-3.5 backdrop-blur-md transition-opacity active:cursor-grabbing xl:flex ${
+        dragConstraints={{ left: -24, right: 48, top: -20, bottom: 48 }}
+        whileHover={{ y: -3, scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={() => onTriggerBurst('Step 01 · Issue Discovery Signal Verified')}
+        title="Drag or click to inspect Step 01 telemetry"
+        className={`bot-float absolute left-[2.5%] top-[7%] z-20 hidden cursor-grab items-center gap-3 rounded-2xl border p-3 pr-4 backdrop-blur-xl transition-opacity active:cursor-grabbing xl:flex ${
           dimAgents ? 'opacity-25' : 'opacity-100'
-        } ${
-          isDark
-            ? 'border-[#335389] bg-[#102142]/92 text-[#ECF3FF] shadow-[0_18px_36px_rgba(3,9,23,0.5)]'
-            : 'border-[#CFE0FF] bg-white/95 text-[#0F1F3D] shadow-[0_16px_34px_rgba(57,120,246,0.16)]'
-        }`}
+        } ${cardSurface}`}
       >
-        <WhimsicalRobot
-          color="blue"
-          mood={turboSwitch ? 'celebrating' : 'curious'}
-          accessory="propeller"
-          size="sm"
-        />
+        {/* Precision Radar Sweep SVG */}
+        <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8]">
+          <svg className="h-6 w-6" viewBox="0 0 32 32" fill="none">
+            <circle
+              cx="16"
+              cy="16"
+              r="12"
+              stroke="#1A73E8"
+              strokeOpacity="0.28"
+              strokeWidth="1.75"
+            />
+            <circle
+              cx="16"
+              cy="16"
+              r="7"
+              stroke="#1A73E8"
+              strokeOpacity="0.45"
+              strokeWidth="1.5"
+              strokeDasharray="3 3"
+            />
+            <g
+              style={{
+                transformOrigin: '16px 16px',
+                animation: turboSwitch
+                  ? 'spinGear 2.5s linear infinite'
+                  : 'spinGear 7s linear infinite',
+              }}
+            >
+              <line
+                x1="16"
+                y1="16"
+                x2="25"
+                y2="9"
+                stroke="#1A73E8"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </g>
+            <circle cx="16" cy="16" r="2.5" fill="#1A73E8" />
+          </svg>
+        </div>
+
         <div>
           <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 animate-ping rounded-full bg-[#3978F6]" />
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#3978F6]">
-              Agent-Scout
+            <span className="h-1.5 w-1.5 rounded-full bg-[#1A73E8]" />
+            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#1A73E8]">
+              01 · issue.created
             </span>
           </div>
-          <p className="font-display text-xs font-extrabold">
-            Scanning Repo...
+          <p className="font-display text-xs font-bold tracking-tight">
+            Autonomous Discovery
           </p>
-          <span className="text-[10px] text-[#5B6B88]">
-            Drag or click me ✨
+          <span className="font-mono text-[10px] text-[#64748B]">
+            SSE stream · 14ms latency
           </span>
         </div>
       </motion.div>
 
-      {/* 4. DRAGGABLE 60-SECOND OFFER STOPWATCH OBJECT (Mid-Left) */}
+      {/* 4. SATELLITE 02: LEASE CHRONOMETER (Mid-Left) */}
       <motion.div
         drag
-        dragConstraints={{ left: -30, right: 80, top: -40, bottom: 40 }}
-        whileHover={{ scale: 1.09, rotate: 4 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => onTriggerBurst('60s Claim Window Extended!')}
-        title="Interactive 60s Offer Timer Object — Drag or click!"
-        className={`orbit-object absolute left-[2%] top-[43%] z-20 hidden cursor-grab items-center gap-3 rounded-2xl border p-2.5 pr-4 backdrop-blur-md transition-opacity active:cursor-grabbing xl:flex ${
+        dragConstraints={{ left: -24, right: 56, top: -36, bottom: 36 }}
+        whileHover={{ y: -3, scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={() => onTriggerBurst('Step 03 · 60s Exclusive Offer Lease Active')}
+        title="Drag or click to inspect the 60s Offer Chronometer"
+        className={`orbit-object absolute left-[2%] top-[44%] z-20 hidden cursor-grab items-center gap-3 rounded-2xl border p-3 pr-4 backdrop-blur-xl transition-opacity active:cursor-grabbing xl:flex ${
           dimOwners ? 'opacity-25' : 'opacity-100'
-        } ${
-          isDark
-            ? 'border-amber-500/40 bg-[#13264C]/92 text-[#ECF3FF] shadow-[0_18px_36px_rgba(3,9,23,0.5)]'
-            : 'border-amber-300 bg-white/95 text-[#0F1F3D] shadow-[0_16px_34px_rgba(210,159,93,0.18)]'
-        }`}
+        } ${cardSurface}`}
       >
-        {/* Custom Animated SVG Stopwatch */}
-        <svg className="h-11 w-11 shrink-0" viewBox="0 0 64 64" fill="none">
-          <rect x="26" y="4" width="12" height="5" rx="2.5" fill="#D29F5D" />
-          <rect x="29" y="9" width="6" height="5" fill="#B47B38" />
-          <path
-            d="M46 14L51 9"
-            stroke="#D29F5D"
-            strokeWidth="4"
-            strokeLinecap="round"
-          />
-          <circle
-            cx="32"
-            cy="36"
-            r="22"
-            fill={isDark ? '#1A2F5A' : '#FFFBEB'}
-            stroke="#D29F5D"
-            strokeWidth="4"
-          />
-          <circle
-            cx="32"
-            cy="36"
-            r="17"
-            stroke="#F59E0B"
-            strokeWidth="1.5"
-            strokeDasharray="4 4"
-          />
-          {/* Animated Clock Hand */}
-          <g
-            style={{
-              transformOrigin: '32px 36px',
-              animation: turboSwitch
-                ? 'spinGear 2.5s linear infinite'
-                : 'spinGear 8s linear infinite',
-            }}
-          >
-            <line
-              x1="32"
-              y1="36"
-              x2="32"
-              y2="22"
-              stroke="#EF4444"
-              strokeWidth="3"
+        <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FEF7E0] text-[#E37400]">
+          <svg className="h-6 w-6" viewBox="0 0 32 32" fill="none">
+            <circle
+              cx="16"
+              cy="17"
+              r="11"
+              stroke="#E37400"
+              strokeOpacity="0.3"
+              strokeWidth="1.75"
+            />
+            <path
+              d="M16 6C22.075 6 27 10.925 27 17"
+              stroke="#F9AB00"
+              strokeWidth="2.2"
               strokeLinecap="round"
             />
-            <circle cx="32" cy="36" r="3.5" fill="#3978F6" />
-          </g>
-        </svg>
-        <div>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-amber-500">
-            Step 03 · Claim Lease
-          </span>
-          <p className="font-display text-xs font-extrabold">
-            {turboSwitch ? '00:59 TURBO LOCK' : '00:48 Offer Window'}
-          </p>
-          <span className="text-[10px] text-[#5B6B88]">
-            Click to pulse timer
-          </span>
-        </div>
-      </motion.div>
-
-      {/* 5. DRAGGABLE 3D GOLD BOUNTY COIN TROPHY (Top-Right) */}
-      <motion.div
-        drag
-        dragConstraints={{ left: -80, right: 30, top: -30, bottom: 60 }}
-        whileHover={{ scale: 1.09, rotate: -4 }}
-        whileTap={{ scale: 0.94 }}
-        onClick={() => onTriggerBurst('Minted +1,200 Ziki Ledger Points!')}
-        title="Click to mint bonus Ziki points!"
-        className={`coin-float absolute right-[3%] top-[6%] z-20 hidden cursor-grab items-center gap-3 rounded-2xl border p-2.5 pr-4 backdrop-blur-md transition-opacity active:cursor-grabbing xl:flex ${
-          dimLedger ? 'opacity-25' : 'opacity-100'
-        } ${
-          isDark
-            ? 'border-amber-400/40 bg-[#102142]/92 text-[#ECF3FF] shadow-[0_18px_36px_rgba(3,9,23,0.5)]'
-            : 'border-amber-300 bg-white/95 text-[#0F1F3D] shadow-[0_16px_34px_rgba(245,158,11,0.18)]'
-        }`}
-      >
-        {/* 3D Gold Coin SVG */}
-        <svg className="h-11 w-11 shrink-0" viewBox="0 0 64 64" fill="none">
-          <circle cx="32" cy="34" r="24" fill="#B45309" />
-          <circle
-            cx="32"
-            cy="30"
-            r="24"
-            fill="url(#goldCoinGrad)"
-            stroke="#FDE68A"
-            strokeWidth="2.5"
-          />
-          <circle
-            cx="32"
-            cy="30"
-            r="18"
-            stroke="#B45309"
-            strokeWidth="1.5"
-            strokeDasharray="4 3"
-          />
-          <path
-            d="M24 22H40L26 38H40"
-            stroke="#78350F"
-            strokeWidth="4.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M24 21H40L26 37H40"
-            stroke="#FEF3C7"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <defs>
-            <linearGradient
-              id="goldCoinGrad"
-              x1="12"
-              y1="10"
-              x2="52"
-              y2="52"
-              gradientUnits="userSpaceOnUse"
+            <line
+              x1="13"
+              y1="3"
+              x2="19"
+              y2="3"
+              stroke="#E37400"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <g
+              style={{
+                transformOrigin: '16px 17px',
+                animation: turboSwitch
+                  ? 'spinGear 2s linear infinite'
+                  : 'spinGear 8s linear infinite',
+              }}
             >
-              <stop stopColor="#FDE047" />
-              <stop offset="0.5" stopColor="#F59E0B" />
-              <stop offset="1" stopColor="#D97706" />
-            </linearGradient>
-          </defs>
-        </svg>
-        <div>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-amber-500">
-            Step 06 · Reward Mint
-          </span>
-          <p className="font-display text-xs font-extrabold">
-            +1,200 Pts Bounty
-          </p>
-          <span className="text-[10px] text-[#5B6B88]">
-            Click to collect coin 🪙
-          </span>
+              <line
+                x1="16"
+                y1="17"
+                x2="16"
+                y2="10"
+                stroke="#E37400"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </g>
+            <circle cx="16" cy="17" r="2" fill="#E37400" />
+          </svg>
         </div>
-      </motion.div>
 
-      {/* 6. DRAGGABLE CROWNED SOLVER BOT SATELLITE (Mid-Right) */}
-      <motion.div
-        drag
-        dragConstraints={{ left: -80, right: 30, top: -40, bottom: 50 }}
-        whileHover={{ scale: 1.08, rotate: 3 }}
-        whileTap={{ scale: 0.94 }}
-        onClick={() => onTriggerBurst('Agent-A3 shipped PR #1847!')}
-        title="Drag me or click to celebrate PR #1847!"
-        className={`bot-float-delayed absolute right-[2.5%] top-[43%] z-20 hidden cursor-grab items-center gap-2.5 rounded-2xl border p-2.5 pr-3.5 backdrop-blur-md transition-opacity active:cursor-grabbing xl:flex ${
-          dimAgents ? 'opacity-25' : 'opacity-100'
-        } ${
-          isDark
-            ? 'border-[#335389] bg-[#102142]/92 text-[#ECF3FF] shadow-[0_18px_36px_rgba(3,9,23,0.5)]'
-            : 'border-[#CFE0FF] bg-white/95 text-[#0F1F3D] shadow-[0_16px_34px_rgba(57,120,246,0.16)]'
-        }`}
-      >
-        <WhimsicalRobot
-          color="orange"
-          mood="celebrating"
-          accessory="crown"
-          size="sm"
-        />
         <div>
           <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-amber-500">
-              Agent-A3 · Rank #1
+            <span className="h-1.5 w-1.5 rounded-full bg-[#F9AB00]" />
+            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#E37400]">
+              03 · claim.offered
             </span>
           </div>
-          <p className="font-display text-xs font-extrabold">
-            PR #1847 Verified
+          <p className="font-display text-xs font-bold tracking-tight">
+            {turboSwitch ? '00:59 Priority Lease' : '60s Offer Lease Lock'}
           </p>
-          <span className="text-[10px] text-[#5B6B88]">
-            99.4% pass rate · Click!
+          <span className="font-mono text-[10px] text-[#64748B]">
+            Deterministic queue handoff
           </span>
         </div>
       </motion.div>
 
-      {/* 7. FLOATING MERGE SHIELD & HARDHAT BOT BADGE (Bottom-Left) */}
+      {/* 5. SATELLITE 03: QUORUM CONSENSUS RING (Top-Right) */}
       <motion.div
         drag
-        dragConstraints={{ left: -25, right: 60, top: -50, bottom: 25 }}
-        whileHover={{ scale: 1.07 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => onTriggerBurst('COI Guard Verified: 4 Distinct Actors!')}
-        className={`floating-pill absolute bottom-[22%] left-[3.5%] z-20 hidden cursor-grab items-center gap-2.5 rounded-2xl border px-3 py-2 backdrop-blur-md transition-opacity active:cursor-grabbing xl:flex ${
-          dimOwners ? 'opacity-25' : 'opacity-100'
-        } ${
-          isDark
-            ? 'border-emerald-500/35 bg-[#102142]/90 text-emerald-300'
-            : 'border-emerald-200 bg-white/95 text-emerald-900 shadow-md'
-        }`}
-      >
-        <WhimsicalRobot
-          color="emerald"
-          mood="happy"
-          accessory="hardhat"
-          size="sm"
-        />
-        <div>
-          <span className="block font-mono text-[10px] font-bold uppercase tracking-wider text-emerald-500">
-            Zero Self-Dealing
-          </span>
-          <span className="font-display text-xs font-bold">
-            COI Matrix Enforced
-          </span>
-        </div>
-      </motion.div>
-
-      {/* 8. FLOATING VIOLET TRIAGER BOT CAPSULE (Bottom-Right) */}
-      <motion.div
-        drag
-        dragConstraints={{ left: -60, right: 25, top: -50, bottom: 25 }}
-        whileHover={{ scale: 1.07 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => onTriggerBurst('2 Reviewers + 1 Triager Confirmed!')}
-        className={`floating-pill absolute bottom-[22%] right-[3.5%] z-20 hidden cursor-grab items-center gap-2.5 rounded-2xl border px-3 py-2 backdrop-blur-md transition-opacity active:cursor-grabbing xl:flex ${
+        dragConstraints={{ left: -56, right: 24, top: -20, bottom: 48 }}
+        whileHover={{ y: -3, scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={() =>
+          onTriggerBurst('Step 02 · Quorum Reached (2 Reviewers + 1 Triager)')
+        }
+        title="Drag or click to verify multi-actor quorum"
+        className={`bot-float-delayed absolute right-[2.5%] top-[7%] z-20 hidden cursor-grab items-center gap-3 rounded-2xl border p-3 pr-4 backdrop-blur-xl transition-opacity active:cursor-grabbing xl:flex ${
           dimAgents ? 'opacity-25' : 'opacity-100'
-        } ${
-          isDark
-            ? 'border-violet-400/35 bg-[#102142]/90 text-violet-200'
-            : 'border-violet-200 bg-white/95 text-violet-950 shadow-md'
-        }`}
+        } ${cardSurface}`}
       >
-        <WhimsicalRobot
-          color="violet"
-          mood="working"
-          accessory="antenna_star"
-          size="sm"
-        />
+        <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F3E8FD] text-[#8430CE]">
+          <svg className="h-6 w-6" viewBox="0 0 32 32" fill="none">
+            <polygon
+              points="16,6 26,23 6,23"
+              stroke="#8430CE"
+              strokeOpacity="0.35"
+              strokeWidth="1.6"
+              fill="none"
+            />
+            <circle cx="16" cy="6" r="3" fill="#8430CE" />
+            <circle cx="26" cy="23" r="3" fill="#1A73E8" />
+            <circle cx="6" cy="23" r="3" fill="#1E8E3E" />
+          </svg>
+        </div>
+
         <div>
-          <span className="block font-mono text-[10px] font-bold uppercase tracking-wider text-violet-500">
-            Step 02 · Quorum
-          </span>
-          <span className="font-display text-xs font-bold">
+          <div className="flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#8430CE]" />
+            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#8430CE]">
+              02 · issue.confirmed
+            </span>
+          </div>
+          <p className="font-display text-xs font-bold tracking-tight">
             2 Reviewers + 1 Triager
+          </p>
+          <span className="font-mono text-[10px] text-[#64748B]">
+            3 independent actors verified
+          </span>
+        </div>
+      </motion.div>
+
+      {/* 6. SATELLITE 04: VERIFIED LEDGER SETTLEMENT (Mid-Right) */}
+      <motion.div
+        drag
+        dragConstraints={{ left: -56, right: 24, top: -36, bottom: 36 }}
+        whileHover={{ y: -3, scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={() => onTriggerBurst('Step 06 · +1,200 Verified Ledger Points Minted')}
+        title="Drag or click to test ledger point settlement"
+        className={`coin-float absolute right-[2%] top-[44%] z-20 hidden cursor-grab items-center gap-3 rounded-2xl border p-3 pr-4 backdrop-blur-xl transition-opacity active:cursor-grabbing xl:flex ${
+          dimLedger ? 'opacity-25' : 'opacity-100'
+        } ${cardSurface}`}
+      >
+        <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#E6F4EA] text-[#1E8E3E]">
+          <svg className="h-6 w-6" viewBox="0 0 32 32" fill="none">
+            <rect
+              x="6"
+              y="6"
+              width="20"
+              height="20"
+              rx="6"
+              stroke="#1E8E3E"
+              strokeWidth="1.8"
+            />
+            <path
+              d="M11.5 16.2L14.6 19.3L20.8 13"
+              stroke="#1E8E3E"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
+
+        <div>
+          <div className="flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#1E8E3E]" />
+            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#1E8E3E]">
+              06 · issue.accepted
+            </span>
+          </div>
+          <p className="font-display text-xs font-bold tracking-tight">
+            +1,200 Pts Settlement
+          </p>
+          <span className="font-mono text-[10px] text-[#64748B]">
+            COI guard · Zero self-dealing
           </span>
         </div>
       </motion.div>
