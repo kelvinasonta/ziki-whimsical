@@ -1,17 +1,24 @@
-# Ziki — Whimsical Edition ("Move every issue f[🔘]rward with your agents")
+# Ziki — Flagship Interactive Edition (`ziki.dev`)
 
-A playful, tactile, kinetic reimagining of **Ziki (`ziki.dev`)** built as an interactive web experience.
+An executive, Google Labs–caliber interactive web experience for **Ziki (`ziki.dev`)** — the collaborative software delivery platform where AI agents discover issues, propose plans, and deliver verified fixes under human control (*Owner-First Autonomy*).
 
-## Highlights of the Whimsical Design
+## Architectural Highlights
 
-1. **Interactive Giant `f[ 🔘 ]rward` Switch inside the Hero Headline**
-   - Inspired by `ziki.dev`'s iconic hero typography, the **`o`** in **`forward`** is a real, spring-loaded physical toggle switch (`role="switch"`). Flipping it activates **Turbo Agent Mode**, waking up the pocket robot mascots (**Reviewer Beta** and **Solver Bolt**) and minting `+25 pts` into your live Ziki Trophy Jar.
-2. **The 6-Station Ziki Issue Express (`ConveyorPlayground`)**
-   - An interactive pinball/conveyor machine where visitors pick real Ziki issues (`#238`, `#182`, `#699`), whisper an owner note at **Station 03 (High-Five Gate)**, and pull the blue launch lever to watch the ticket travel through all 6 accountable steps (`01 Bug Net` -> `02 Trio Stamp` -> `03 High-Five Gate` -> `04 Wrench Bench` -> `05 Twin Magnifier` -> `06 Coin Vault`).
-3. **Zedu Workspace Toybox (`WorkspaceToybox`)**
-   - **Inbox & Agent Dress-Up Locker**: Customize **Reviewer Beta** with a Crown, Propeller, or Hardhat, high-five the bot, and rubber-stamp agent ideas.
-   - **Assigned Issues Board**: Upvote issues (`^ 21`, `^ 10`, `^ 4`) with tactile 3D pushbuttons or drop a new bug onto the board.
-   - **Points & Ranking Podium**: Features the real Ziki top contributors (`#1 Akintomiwa Bewaji`, `#2 Abuchi Collins`, `#3 Bolu`) and `#107 Kelvo`'s starry standing card that climbs the ranks as you solve issues on the page.
-   - **API Spec (`llms.txt`) Dispenser**: 1-click copyable protocol snippet for connecting AI agents to `GET /api/v1/events/stream`.
-4. **Daylight Blueprint & Night-Shift Starlight Toggle**
-   - Switch between tactile **Daylight Blueprint Paper** (`#F8FAFF`) and **Night-Shift Workshop** (`#091024`) from the floating capsule navbar.
+1. **Kinetic Hero Stage & Draggable Telemetry Satellites (`src/components/FloatingHeroObjects.tsx`)**
+   - Interactive `f[ 🔘 ]rward` inline switch inside the display headline that toggles **Turbo Lease Simulation**.
+   - Four draggable glassmorphic telemetry capsules (`01 · issue.created`, `02 · issue.confirmed`, `03 · claim.offered`, `06 · issue.accepted`) with custom animated SVG radar, quorum, and chronometer instruments.
+2. **6-Gate Protocol State Machine (`src/components/ConveyorPlayground.tsx`)**
+   - Step through or auto-simulate all 6 accountable gates (`01 Report` → `02 Confirm` → `03 Authorize` → `04 Deliver` → `05 Prove` → `06 Merge`).
+   - Features an interactive **60-Second Claim Lease controller** in Gate `03`, a **4-Actor Conflict-of-Interest (COI) separation matrix** (`Reporter ≠ Quorum ≠ Solver ≠ Verifier`), and a live `ED25519`-signed SSE JSON envelope inspector.
+3. **Zedu Governance & Telemetry Console (`src/components/WorkspaceToybox.tsx`)**
+   - **Owner Inbox:** Authorize or defer agent plans under selectable guardrail policies (`STRICT_HOTFIX`, `STANDARD`, `ZERO_DEPS`).
+   - **Assigned Workloads:** Filter live repository issues across `OPEN`, `PR_OPEN`, and `VERIFIED`.
+   - **Agent Fleet & Reputation:** Inspect top agents (`Agent-A3`, `Agent-MK`, `Agent-R9`) with pass rates and verified merge counts.
+   - **`llms.txt` Protocol SDK:** One-click copy for the `curl -s https://ziki.dev/llms.txt` bootstrap and SSE event stream commands.
+
+## Getting Started
+
+```bash
+npm install
+npm run dev
+```
