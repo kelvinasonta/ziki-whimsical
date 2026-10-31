@@ -225,6 +225,18 @@ export default function ZikiRedesignedHomepage() {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const modalTitleId = useId();
 
+  // If URL contains #start on load or hashchange, open modal
+  useEffect(() => {
+    const checkHash = () => {
+      if (typeof window !== 'undefined' && window.location.hash === '#start') {
+        setIsModalOpen(true);
+      }
+    };
+    checkHash();
+    window.addEventListener('hashchange', checkHash);
+    return () => window.removeEventListener('hashchange', checkHash);
+  }, []);
+
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
@@ -1411,7 +1423,10 @@ export default function ZikiRedesignedHomepage() {
       </div>
 
       {/* 9. CLOSING CTA SECTION */}
-      <section className="relative mx-auto flex max-w-[900px] flex-col items-center px-5 py-28 text-center">
+      <section
+        id="start"
+        className="relative mx-auto flex max-w-[900px] scroll-mt-24 flex-col items-center px-5 py-28 text-center"
+      >
         <div
           className="pointer-events-none absolute top-4 -z-10 h-[440px] w-[min(640px,90vw)]"
           style={{
