@@ -502,6 +502,17 @@ export default function ZikiRedesignedHomepage() {
             activeFilter={activeHeroFilter}
             burstKey={burstKey}
             onTriggerBurst={(label) => triggerCelebration(label, 35)}
+            onToggleTurbo={() => {
+              const next = !turboSwitch;
+              setTurboSwitch(next);
+              triggerCelebration(
+                next
+                  ? 'Turbo Collaboration Activated!'
+                  : 'Switched to Standard Flow',
+                50
+              );
+            }}
+            onAwardBonus={(pts, label) => handleMintPoints(pts, label)}
           />
 
           {/* Hero Frame Top Bar */}

@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Zap, PartyPopper } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 interface FloatingHeroObjectsProps {
   isDark: boolean;
@@ -9,6 +11,67 @@ interface FloatingHeroObjectsProps {
   activeFilter: string;
   burstKey: number;
   onTriggerBurst: (label: string) => void;
+  onToggleTurbo?: () => void;
+  onAwardBonus?: (pts: number, label: string) => void;
+}
+
+function playWhimsicalSound(type: 'blip' | 'chord') {
+  if (typeof window === 'undefined') return;
+  try {
+    const AudioCtx =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    if (ctx.state === 'suspended') {
+      ctx.resume();
+    }
+    if (type === 'blip') {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.18, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.18);
+    } else {
+      // Ascending celebratory arpeggio: C5, E5, G5, C6
+      const freqs = [523.25, 659.25, 783.99, 1046.5];
+      freqs.forEach((f, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(f, ctx.currentTime + i * 0.05);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime + i * 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.05 + 0.32);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + i * 0.05);
+        osc.stop(ctx.currentTime + i * 0.05 + 0.32);
+      });
+    }
+  } catch {
+    // Fail silently
+  }
+}
+
+function fireConfetti(originX = 0.5, originY = 0.5) {
+  try {
+    confetti({
+      particleCount: 75,
+      spread: 70,
+      origin: { x: originX, y: originY },
+      colors: ['#1A73E8', '#1E8E3E', '#F9AB00', '#8430CE', '#FF6097', '#00D4FF'],
+      disableForReducedMotion: true,
+      zIndex: 9999,
+    });
+  } catch {
+    // Fail gracefully
+  }
 }
 
 const BURST_PARTICLES = Array.from({ length: 12 }, (_, i) => {
@@ -37,6 +100,8 @@ export function FloatingHeroObjects({
   activeFilter,
   burstKey,
   onTriggerBurst,
+  onToggleTurbo,
+  onAwardBonus,
 }: FloatingHeroObjectsProps) {
   const dimAgents = activeFilter !== 'all' && activeFilter !== 'agents';
   const dimOwners = activeFilter !== 'all' && activeFilter !== 'owners';
@@ -386,6 +451,114 @@ export function FloatingHeroObjects({
           </span>
         </div>
       </motion.div>
+
+      {/* 7. WHIMSICAL FLOATING BUTTON 01 (Left Animation Side - Turbo Warp) */}
+      <motion.button
+        type="button"
+        drag
+        dragConstraints={{ left: -20, right: 40, top: -24, bottom: 24 }}
+        whileHover={{ y: -4, scale: 1.05 }}
+        whileTap={{ scale: 0.94 }}
+        onClick={() => {
+          playWhimsicalSound('blip');
+          fireConfetti(0.18, 0.72);
+          if (onToggleTurbo) {
+            onToggleTurbo();
+          }
+          if (onAwardBonus) {
+            onAwardBonus(50, '⚡ Turbo Warp Activated');
+          } else {
+            onTriggerBurst('⚡ Turbo Warp Activated · Left Orbits Hyper-Charged (+50 pts)');
+          }
+        }}
+        title="Whimsical Left: Click or drag to activate Turbo Warp (+50 pts)"
+        aria-label="Activate Turbo Warp on left animation side"
+        className={`bot-float absolute left-[2%] top-[72%] z-30 flex cursor-grab items-center gap-2.5 sm:gap-3 rounded-2xl border p-2.5 sm:p-3 sm:pr-4 backdrop-blur-xl transition-all active:cursor-grabbing ${
+          dimAgents ? 'opacity-35' : 'opacity-100'
+        } ${
+          isDark
+            ? 'border-[#388BFD]/50 bg-[#0B1A3A]/90 text-white shadow-[0_12px_36px_rgba(26,115,232,0.35),0_0_20px_rgba(56,139,253,0.2)] hover:border-[#58A6FF]'
+            : 'border-[#1A73E8]/40 bg-white/95 text-[#0F172A] shadow-[0_12px_32px_rgba(26,115,232,0.2),0_2px_8px_rgba(26,115,232,0.1)] hover:border-[#1A73E8]'
+        }`}
+      >
+        <div className="relative flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#1A73E8] to-[#4285F4] text-white shadow-md">
+          <Zap className="h-4 w-4 sm:h-5 sm:w-5 fill-current text-white animate-pulse" />
+          <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5 sm:h-3 sm:w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-emerald-500"></span>
+          </span>
+        </div>
+
+        <div className="text-left">
+          <div className="flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#1A73E8]" />
+            <span className="font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-[#1A73E8] dark:text-[#8AB4F8]">
+              Whimsical Left · 01
+            </span>
+            <span className="rounded-full bg-[#1A73E8]/10 px-1.5 py-0.2 font-mono text-[9px] font-bold text-[#1A73E8] dark:bg-[#1A73E8]/30 dark:text-[#8AB4F8]">
+              +50 pts
+            </span>
+          </div>
+          <p className="font-display text-xs sm:text-sm font-extrabold tracking-tight">
+            ⚡ Turbo Warp
+          </p>
+          <span className="hidden sm:inline-block font-mono text-[9.5px] text-[#64748B] dark:text-[#94A3B8]">
+            Accelerate left orbits & gears
+          </span>
+        </div>
+      </motion.button>
+
+      {/* 8. WHIMSICAL FLOATING BUTTON 02 (Right Animation Side - Quorum Fiesta) */}
+      <motion.button
+        type="button"
+        drag
+        dragConstraints={{ left: -40, right: 20, top: -24, bottom: 24 }}
+        whileHover={{ y: -4, scale: 1.05 }}
+        whileTap={{ scale: 0.94 }}
+        onClick={() => {
+          playWhimsicalSound('chord');
+          fireConfetti(0.82, 0.72);
+          if (onAwardBonus) {
+            onAwardBonus(100, '🎉 Quorum Fiesta Celebration');
+          }
+          onTriggerBurst('🎉 Quorum Fiesta! Confetti Cannon Fired (+100 pts)');
+        }}
+        title="Whimsical Right: Click or drag to launch Quorum Fiesta Confetti (+100 pts)"
+        aria-label="Launch Quorum Fiesta confetti on right animation side"
+        className={`coin-float absolute right-[2%] top-[72%] z-30 flex cursor-grab items-center gap-2.5 sm:gap-3 rounded-2xl border p-2.5 sm:p-3 sm:pr-4 backdrop-blur-xl transition-all active:cursor-grabbing ${
+          dimLedger ? 'opacity-35' : 'opacity-100'
+        } ${
+          isDark
+            ? 'border-[#A142F4]/50 bg-[#1A0B2E]/90 text-white shadow-[0_12px_36px_rgba(132,48,206,0.35),0_0_20px_rgba(161,66,244,0.2)] hover:border-[#C58AF9]'
+            : 'border-[#8430CE]/40 bg-white/95 text-[#0F172A] shadow-[0_12px_32px_rgba(132,48,206,0.2),0_2px_8px_rgba(132,48,206,0.1)] hover:border-[#8430CE]'
+        }`}
+      >
+        <div className="relative flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#8430CE] to-[#F9AB00] text-white shadow-md">
+          <PartyPopper className="h-4 w-4 sm:h-5 sm:w-5 text-white animate-bounce" />
+          <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5 sm:h-3 sm:w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-amber-500"></span>
+          </span>
+        </div>
+
+        <div className="text-left">
+          <div className="flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#8430CE]" />
+            <span className="font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-[#8430CE] dark:text-[#C58AF9]">
+              Whimsical Right · 02
+            </span>
+            <span className="rounded-full bg-[#8430CE]/10 px-1.5 py-0.2 font-mono text-[9px] font-bold text-[#8430CE] dark:bg-[#8430CE]/30 dark:text-[#C58AF9]">
+              +100 pts
+            </span>
+          </div>
+          <p className="font-display text-xs sm:text-sm font-extrabold tracking-tight">
+            🎉 Quorum Fiesta
+          </p>
+          <span className="hidden sm:inline-block font-mono text-[9.5px] text-[#64748B] dark:text-[#94A3B8]">
+            Fire dazzling confetti shower
+          </span>
+        </div>
+      </motion.button>
     </>
   );
 }
