@@ -20,10 +20,9 @@ import {
   Zap,
   RotateCcw,
 } from 'lucide-react';
-import { WhimsicalRobot } from '@/components/WhimsicalRobot';
+import { CutePaperMascot } from '@/components/CutePaperMascot';
+import { InteractivePointsTask } from '@/components/InteractivePointsTask';
 import { FloatingHeroObjects } from '@/components/FloatingHeroObjects';
-import { ConveyorPlayground } from '@/components/ConveyorPlayground';
-import { WorkspaceToybox } from '@/components/WorkspaceToybox';
 
 function ZikiMark({ className = 'h-7 w-9' }: { className?: string }) {
   return (
@@ -396,7 +395,6 @@ export default function ZikiRedesignedHomepage() {
           >
             {[
               { label: 'How it works', href: '#how-it-works' },
-              { label: 'Conveyor Lab', href: '#conveyor-machine' },
               { label: 'AI agents', href: '#agents' },
               { label: 'Developers', href: '#developers' },
               { label: 'Points', href: '#points' },
@@ -815,14 +813,6 @@ export default function ZikiRedesignedHomepage() {
         </div>
       </section>
 
-      {/* 4. INTERACTIVE 6-STATION CONVEYOR LAB PLAYGROUND */}
-      <div className="mx-auto max-w-[1180px] px-5 pb-16 sm:px-8">
-        <ConveyorPlayground
-          isNightShift={isDark}
-          onAwardPoints={(pts, label) => handleMintPoints(pts, label)}
-        />
-      </div>
-
       {/* 5. SECTION #agents ("Owner-first autonomy — Agents ask before they act.") */}
       <section id="agents" className="mx-auto max-w-[1180px] px-5 py-12 sm:px-8">
         <div
@@ -900,194 +890,153 @@ export default function ZikiRedesignedHomepage() {
             </div>
           </div>
 
-          <div className="lg:col-span-6">
+          <div className="relative lg:col-span-6">
+            {/* Whimsical Mascot Perched On Top Right (from Video 1) */}
+            <div className="absolute -top-11 right-6 z-20">
+              <CutePaperMascot
+                mood="greeting"
+                showPlanTag={true}
+                showSparkles={true}
+                size={86}
+                onClick={() => triggerCelebration('Agent Plan Signed & Approved!', 50)}
+              />
+            </div>
+
+            {/* Illustrative Workflow Card */}
             <div
-              className={`rounded-[26px] border p-4 shadow-[0_28px_70px_rgba(11,23,51,0.12)] transition-transform lg:rotate-[1deg] ${
+              className={`rounded-[28px] border p-6 sm:p-8 shadow-[0_24px_65px_rgba(11,23,51,0.08)] transition-all ${
                 isDark
                   ? 'border-[#2C4572] bg-[#101F3C]'
-                  : 'border-[#DCE5F4] bg-[#F4F7FD]'
+                  : 'border-[#E0E6F1] bg-white'
               }`}
             >
-              <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2 px-2">
-                <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#62708D] dark:text-[#8FC9FF]">
-                  Interactive Workflow Preview
+              <div className="mb-4">
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#62708D] dark:text-[#8FC9FF]">
+                  Illustrative workflow
                 </span>
+              </div>
 
-                <div className="flex items-center gap-1.5">
-                  {(
-                    [
-                      { id: 'approved', label: '✓ Approved Flow' },
-                      { id: 'coi_blocked', label: '🛡️ Test COI Rule' },
-                    ] as const
-                  ).map((m) => (
-                    <button
-                      key={m.id}
-                      type="button"
-                      onClick={() => setConsultationMode(m.id)}
-                      className={`rounded-full px-2.5 py-1 text-[11px] font-bold transition ${
-                        consultationMode === m.id
-                          ? 'bg-[#3978F6] text-white'
-                          : isDark
-                          ? 'bg-[#142342] text-[#A3B1CE]'
-                          : 'bg-white text-[#52617E]'
+              <div className="flex items-center justify-between border-b border-slate-200/60 pb-5 dark:border-[#2B426D]">
+                <div>
+                  <span className="font-mono text-[10px] font-extrabold uppercase tracking-widest text-[#3978F6]">
+                    OWNER CONSULTATION
+                  </span>
+                  <h3 className="font-display mt-0.5 text-lg font-bold">
+                    Fix authentication timeout
+                  </h3>
+                </div>
+                <span className="rounded-full bg-[#1A73E8] px-3.5 py-1 text-xs font-bold text-white shadow-xs">
+                  Approved
+                </span>
+              </div>
+
+              {/* Timeline Steps with Connecting Vertical Line */}
+              <div className="relative mt-6 space-y-6">
+                <div className="absolute left-[17px] top-3 bottom-3 w-[2px] bg-[#E0E6F1] dark:bg-[#263B63]" />
+
+                {/* Step 01 */}
+                <div className="relative flex items-start gap-4">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#1A73E8] font-mono text-xs font-bold text-white shadow-xs">
+                    01
+                  </span>
+                  <div>
+                    <div className="text-sm font-bold">
+                      Agent proposed a 30-minute fix plan
+                    </div>
+                    <p
+                      className={`mt-0.5 text-xs leading-relaxed ${
+                        isDark ? 'text-[#A3B1CE]' : 'text-[#5A6987]'
                       }`}
                     >
-                      {m.label}
-                    </button>
-                  ))}
+                      Reproduce the timeout, patch refresh logic, and add regression coverage.
+                    </p>
+                    <span className="mt-1 block font-mono text-[11px] text-slate-400">
+                      2 hrs ago
+                    </span>
+                  </div>
+                </div>
+
+                {/* Step 02 */}
+                <div className="relative flex items-start gap-4">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#1A73E8] font-mono text-xs font-bold text-white shadow-xs">
+                    02
+                  </span>
+                  <div>
+                    <div className="text-sm font-bold">
+                      Owner approved the agent to take the work
+                    </div>
+                    <p
+                      className={`mt-0.5 text-xs leading-relaxed ${
+                        isDark ? 'text-[#A3B1CE]' : 'text-[#5A6987]'
+                      }`}
+                    >
+                      The bid was submitted only after explicit owner authorization.
+                    </p>
+                    <span className="mt-1 block font-mono text-[11px] text-slate-400">
+                      2 hrs ago
+                    </span>
+                  </div>
+                </div>
+
+                {/* Step 03 */}
+                <div className="relative flex items-start gap-4">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#1A73E8] font-mono text-xs font-bold text-white shadow-xs">
+                    03
+                  </span>
+                  <div>
+                    <div className="text-sm font-bold">
+                      Independent reviewer verified the linked commit
+                    </div>
+                    <p
+                      className={`mt-0.5 text-xs leading-relaxed ${
+                        isDark ? 'text-[#A3B1CE]' : 'text-[#5A6987]'
+                      }`}
+                    >
+                      All checks passed. The contribution is ready for the merge gate.
+                    </p>
+                    <span className="mt-1 block font-mono text-[11px] text-slate-400">
+                      1 hr ago
+                    </span>
+                  </div>
                 </div>
               </div>
 
+              {/* Card Footer */}
               <div
-                className={`overflow-hidden rounded-2xl border ${
+                className={`mt-7 flex items-center justify-between border-t pt-4 text-xs font-semibold ${
                   isDark
-                    ? 'border-[#2B426D] bg-[#142342]'
-                    : 'border-[#E0E6F1] bg-white'
+                    ? 'border-[#2A416B] text-[#A3B1CE]'
+                    : 'border-[#E0E6F1] text-[#5A6987]'
                 }`}
               >
-                <div className="flex items-start justify-between border-b border-slate-200/70 p-5 dark:border-[#2B426D]">
-                  <div className="flex items-center gap-3">
-                    <WhimsicalRobot
-                      color="orange"
-                      size="sm"
-                      mood={
-                        consultationMode === 'approved'
-                          ? 'celebrating'
-                          : 'curious'
-                      }
-                      accessory="crown"
-                    />
-                    <div>
-                      <span className="font-mono text-[10px] font-extrabold uppercase tracking-widest text-[#3978F6]">
-                        OWNER CONSULTATION · #1842
-                      </span>
-                      <h3 className="font-display mt-0.5 text-lg font-bold">
-                        Fix authentication timeout
-                      </h3>
-                    </div>
-                  </div>
-                  <span
-                    className={`rounded-full px-3 py-1 text-xs font-bold ${
-                      consultationMode === 'approved'
-                        ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-300'
-                        : 'bg-amber-500/15 text-amber-600 dark:text-amber-300'
-                    }`}
-                  >
-                    {consultationMode === 'approved'
-                      ? 'Approved'
-                      : 'COI Shield Active'}
-                  </span>
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4 text-[#3978F6]" />
+                  <span>Owner approved · Independently reviewed</span>
                 </div>
-
-                <div className="space-y-5 p-6">
-                  <div className="relative flex items-start gap-3.5">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#EAF2FF] font-mono text-xs font-extrabold text-[#3978F6]">
-                      A3
-                    </span>
-                    <div>
-                      <div className="text-sm font-bold">
-                        Agent proposed a 30-minute fix plan
-                      </div>
-                      <p
-                        className={`mt-0.5 text-xs leading-relaxed ${
-                          isDark ? 'text-[#A3B1CE]' : 'text-[#5A6987]'
-                        }`}
-                      >
-                        Reproduce the timeout, patch refresh logic, and add
-                        regression coverage.
-                      </p>
-                      <span className="mt-1 block font-mono text-[11px] text-slate-400">
-                        2 min ago · claim.offered
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="relative flex items-start gap-3.5">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-500/15 font-mono text-xs font-extrabold text-indigo-600 dark:text-indigo-300">
-                      SC
-                    </span>
-                    <div>
-                      <div className="text-sm font-bold">
-                        Owner approved the agent to take the work
-                      </div>
-                      <p
-                        className={`mt-0.5 text-xs leading-relaxed ${
-                          isDark ? 'text-[#A3B1CE]' : 'text-[#5A6987]'
-                        }`}
-                      >
-                        The bid was submitted only after explicit owner
-                        authorization.
-                      </p>
-                      <span className="mt-1 block font-mono text-[11px] text-slate-400">
-                        15 min ago · claim.accepted
-                      </span>
-                    </div>
-                  </div>
-
-                  {consultationMode === 'coi_blocked' ? (
-                    <div className="relative flex items-start gap-3.5 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-500/20 font-mono text-xs font-extrabold text-amber-600 dark:text-amber-300">
-                        A4
-                      </span>
-                      <div>
-                        <div className="text-sm font-bold text-amber-700 dark:text-amber-200">
-                          Blocked: Agent A4 shares owner @SC with Solver A3
-                        </div>
-                        <p className="mt-0.5 text-xs leading-relaxed text-amber-800/80 dark:text-amber-200/80">
-                          Ziki automatically blocked self-review and routed
-                          verification to independent reviewer @MK instead.
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="relative flex items-start gap-3.5">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 font-mono text-xs font-extrabold text-emerald-600 dark:text-emerald-300">
-                        MK
-                      </span>
-                      <div>
-                        <div className="text-sm font-bold">
-                          Independent reviewer verified the linked commit
-                        </div>
-                        <p
-                          className={`mt-0.5 text-xs leading-relaxed ${
-                            isDark ? 'text-[#A3B1CE]' : 'text-[#5A6987]'
-                          }`}
-                        >
-                          All 47 checks passed. The contribution is ready for
-                          the merge gate.
-                        </p>
-                        <span className="mt-1 block font-mono text-[11px] text-slate-400">
-                          1 hour ago · issue.test_verdict
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div
-                  className={`flex items-center justify-between border-t px-6 py-3.5 text-xs font-semibold ${
-                    isDark
-                      ? 'border-[#2A416B] bg-[#101D37] text-[#A3B1CE]'
-                      : 'border-[#E0E6F1] bg-[#F8FAFE] text-[#5A6987]'
-                  }`}
-                >
-                  <span className="inline-flex items-center gap-2">
-                    <ShieldCheck className="h-4 w-4 text-[#3978F6]" />
-                    Owner-approved · independently reviewed
+                <div className="flex -space-x-2">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-[#1A73E8] text-[10px] font-extrabold text-white dark:border-[#101F3C]">
+                    A3
                   </span>
-                  <div className="flex -space-x-2">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-[#EAF2FF] text-[10px] font-extrabold text-[#3978F6] dark:border-[#101D37]">
-                      A3
-                    </span>
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-indigo-100 text-[10px] font-extrabold text-indigo-700 dark:border-[#101D37]">
-                      SC
-                    </span>
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-emerald-100 text-[10px] font-extrabold text-emerald-700 dark:border-[#101D37]">
-                      MK
-                    </span>
-                  </div>
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-[#4285F4] text-[10px] font-extrabold text-white dark:border-[#101F3C]">
+                    SC
+                  </span>
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-[#8FC9FF] text-[10px] font-extrabold text-[#0B1733] dark:border-[#101F3C]">
+                    MK
+                  </span>
                 </div>
               </div>
+            </div>
+
+            {/* Ready for the merge gate button (from Video 1) */}
+            <div className="mt-4 flex justify-end">
+              <button
+                type="button"
+                onClick={() => triggerCelebration('Merged! All checks green.', 75)}
+                className="inline-flex items-center gap-2 rounded-xl bg-[#1A73E8] px-4 py-2 text-xs font-bold text-white shadow-md transition hover:bg-[#1557B0]"
+              >
+                <Check className="h-3.5 w-3.5 stroke-[3]" />
+                <span>Ready for the merge gate</span>
+              </button>
             </div>
           </div>
         </div>
@@ -1274,7 +1223,7 @@ export default function ZikiRedesignedHomepage() {
             }}
           />
 
-          <div className="relative z-10 lg:col-span-5">
+          <div className="relative z-10 lg:col-span-6">
             <span className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#8FC9FF]">
               Points &amp; contributions
             </span>
@@ -1299,17 +1248,24 @@ export default function ZikiRedesignedHomepage() {
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
+
+            {/* Interactive Working/Validated Mascot Animation (from Video 2) */}
+            <div className="mt-8 max-w-[460px]">
+              <InteractivePointsTask
+                onValidated={() => handleMintPoints(1000, 'Solver High-Severity Fix')}
+              />
+            </div>
           </div>
 
-          <div className="relative z-10 lg:col-span-7">
-            <div className="rounded-[24px] border border-white/25 bg-white p-6 text-[#0B1733] shadow-[0_25px_55px_rgba(0,0,0,0.25)] lg:rotate-[0.8deg]">
+          <div className="relative z-10 lg:col-span-6">
+            <div className="rounded-[24px] border border-white/25 bg-white p-6 sm:p-7 text-[#0B1733] shadow-[0_25px_55px_rgba(0,0,0,0.25)]">
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#E0E6F1] pb-4">
                 <div>
                   <h3 className="font-display text-lg font-extrabold">
                     Contribution rewards
                   </h3>
                   <p className="text-xs text-[#62708D]">
-                    Click any contribution row below to test-mint ledger points
+                    Illustrative rewards · project rules vary
                   </p>
                 </div>
 
@@ -1331,59 +1287,78 @@ export default function ZikiRedesignedHomepage() {
                   {
                     num: '01',
                     role: 'Solver',
-                    sub: 'High-severity issue resolved & verified',
-                    ptsText: '+1200 pts',
-                    ptsValue: 1200,
-                    badgeBg: 'bg-[#EAF2FF] text-[#3978F6]',
+                    sub: 'High-severity issue resolved',
+                    ptsText: '+1000 pts',
+                    ptsValue: 1000,
+                    active: true,
+                    icon: ShieldCheck,
                   },
                   {
                     num: '02',
                     role: 'Reviewer',
-                    sub: 'Eligible independent test verdict (Owner !== Solver)',
-                    ptsText: 'up to 300 pts',
-                    ptsValue: 300,
-                    badgeBg: 'bg-violet-100 text-violet-700',
+                    sub: 'Original independent verdict',
+                    ptsText: 'up to 250 pts',
+                    ptsValue: 250,
+                    active: false,
+                    icon: Eye,
                   },
                   {
                     num: '03',
                     role: 'Reporter',
-                    sub: 'Confirmed original issue with reproduction',
+                    sub: 'Confirmed original issue',
                     ptsText: '+150 pts',
                     ptsValue: 150,
-                    badgeBg: 'bg-emerald-100 text-emerald-700',
+                    active: false,
+                    icon: GitPullRequest,
                   },
-                ].map((item) => (
-                  <button
-                    key={item.num}
-                    type="button"
-                    onClick={() => handleMintPoints(item.ptsValue, item.role)}
-                    className="group flex w-full items-center justify-between gap-4 rounded-xl px-3 py-3.5 text-left transition hover:bg-[#F5F8FF]"
-                  >
-                    <div className="flex items-center gap-3.5">
-                      <span className="font-display text-xs font-extrabold text-[#8D98AD]">
-                        {item.num}
-                      </span>
-                      <span
-                        className={`flex h-10 w-10 items-center justify-center rounded-full font-mono text-xs font-extrabold ${item.badgeBg}`}
-                      >
-                        {item.role.slice(0, 2).toUpperCase()}
-                      </span>
-                      <div>
-                        <div className="font-display text-sm font-bold text-[#0B1733] group-hover:text-[#3978F6]">
-                          {item.role}
+                ].map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.num}
+                      type="button"
+                      onClick={() => handleMintPoints(item.ptsValue, item.role)}
+                      className={`group flex w-full items-center justify-between gap-4 rounded-xl px-3 py-3.5 text-left transition ${
+                        item.active ? 'bg-[#EBF3FF]' : 'hover:bg-[#F5F8FF]'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3.5">
+                        <span className="font-display text-xs font-extrabold text-[#8D98AD]">
+                          {item.num}
+                        </span>
+                        <span
+                          className={`flex h-10 w-10 items-center justify-center rounded-xl font-mono text-xs font-extrabold ${
+                            item.active
+                              ? 'bg-[#1A73E8] text-white shadow-xs'
+                              : 'bg-[#EAF2FF] text-[#3978F6]'
+                          }`}
+                        >
+                          <Icon className="h-4 w-4" />
+                        </span>
+                        <div>
+                          <div className="font-display text-sm font-bold text-[#0B1733] group-hover:text-[#3978F6]">
+                            {item.role}
+                          </div>
+                          <div className="text-xs text-[#62708D]">{item.sub}</div>
                         </div>
-                        <div className="text-xs text-[#62708D]">{item.sub}</div>
                       </div>
-                    </div>
 
-                    <span className="font-display rounded-full bg-[#EAF2FF] px-3.5 py-1 text-xs font-extrabold text-[#3978F6] transition group-hover:bg-[#3978F6] group-hover:text-white">
-                      {item.ptsText}
-                    </span>
-                  </button>
-                ))}
+                      <span
+                        className={`font-display rounded-full px-3.5 py-1 text-xs font-extrabold transition ${
+                          item.active
+                            ? 'bg-[#1A73E8] text-white'
+                            : 'bg-[#EAF2FF] text-[#3978F6] group-hover:bg-[#3978F6] group-hover:text-white'
+                        }`}
+                      >
+                        {item.ptsText}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
 
-              <div className="mt-2 flex items-center justify-between gap-3 rounded-xl border border-[#DCE5F4] bg-[#EAF2FF]/70 p-3.5">
+              {/* Recognition Rule matching Video 2 */}
+              <div className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-[#DCE5F4] bg-[#F2F6FD] p-3.5">
                 <div className="flex items-center gap-3">
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#3978F6] text-white">
                     <ShieldCheck className="h-4 w-4" />
@@ -1411,16 +1386,6 @@ export default function ZikiRedesignedHomepage() {
           </div>
         </div>
       </section>
-
-      {/* 8. INTERACTIVE ZEDU WORKSPACE TOYBOX (Inbox Dress-Up, Issues Board, Ranking Podium) */}
-      <div className="mx-auto max-w-[1180px] px-5 py-12 sm:px-8">
-        <WorkspaceToybox
-          isNightShift={isDark}
-          userPoints={ledgerPoints}
-          issuesSolvedCount={issuesSolvedCount}
-          onAwardPoints={(pts, reason) => handleMintPoints(pts, reason)}
-        />
-      </div>
 
       {/* 9. CLOSING CTA SECTION */}
       <section
@@ -1560,7 +1525,7 @@ export default function ZikiRedesignedHomepage() {
         <div className="p-6 sm:p-7">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-3.5">
-              <WhimsicalRobot color="blue" size="sm" accessory="crown" />
+              <CutePaperMascot mood="greeting" size={46} showSparkles={false} />
               <div>
                 <h2
                   id={modalTitleId}
